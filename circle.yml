@@ -1,0 +1,10 @@
+general:
+  build_dir: MVVM-Example
+
+machine:
+  java:
+    version: oraclejdk8
+
+dependencies:
+    override:
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-22.0.1,android-22,extra-google-google_play_services,extra-android-support,extra-android-m2repository
