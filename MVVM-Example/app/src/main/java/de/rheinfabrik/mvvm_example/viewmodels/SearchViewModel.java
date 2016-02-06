@@ -1,5 +1,7 @@
 package de.rheinfabrik.mvvm_example.viewmodels;
 
+import com.jakewharton.rxrelay.PublishRelay;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -37,12 +39,12 @@ public final class SearchViewModel {
     /**
      * Emit a string to this command to start a search.
      */
-    public final PublishSubject<String> searchCommand = PublishSubject.create();
+    public final PublishRelay<String> searchCommand = PublishRelay.create();
 
     /**
      * Toggle the visibility of the search.
      */
-    public final PublishSubject<Void> toggleSearchVisibilityCommand = PublishSubject.create();
+    public final PublishRelay<Void> toggleSearchVisibilityCommand = PublishRelay.create();
 
     // Members
 

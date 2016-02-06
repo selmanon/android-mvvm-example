@@ -6,6 +6,8 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 
+import com.jakewharton.rxrelay.PublishRelay;
+
 import de.rheinfabrik.mvvm_example.network.models.SearchResult;
 import de.rheinfabrik.mvvm_example.utils.IntentFactory;
 import rx.Observable;
@@ -40,12 +42,12 @@ public final class SearchResultViewModel {
     /**
      * Send item to this command to trigger changes to the text subject.
      */
-    public final PublishSubject<SearchResult> setSearchResultCommand = PublishSubject.create();
+    public final PublishRelay<SearchResult> setSearchResultCommand = PublishRelay.create();
 
     /**
      * Send null to this command to request a details intent.
      */
-    public final PublishSubject<Void> openDetailsCommand = PublishSubject.create();
+    public final PublishRelay<Void> openDetailsCommand = PublishRelay.create();
 
     // Members
 

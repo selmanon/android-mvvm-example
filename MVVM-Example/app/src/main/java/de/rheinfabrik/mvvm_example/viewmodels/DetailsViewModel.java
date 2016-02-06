@@ -1,5 +1,7 @@
 package de.rheinfabrik.mvvm_example.viewmodels;
 
+import com.jakewharton.rxrelay.PublishRelay;
+
 import de.rheinfabrik.mvvm_example.controller.DetailsResultController;
 import de.rheinfabrik.mvvm_example.network.models.DetailsResult;
 import de.rheinfabrik.mvvm_example.network.models.SearchResult;
@@ -42,12 +44,12 @@ public final class DetailsViewModel {
     /**
      * Send an item to this command to update the text etc.
      */
-    public final PublishSubject<SearchResult> setItemCommand = PublishSubject.create();
+    public final PublishRelay<SearchResult> setItemCommand = PublishRelay.create();
 
     /**
      * Send a value to this command to load the required details.
      */
-    public final PublishSubject<Void> loadDetailsCommand = PublishSubject.create();
+    public final PublishRelay<Void> loadDetailsCommand = PublishRelay.create();
 
     // Members
 
