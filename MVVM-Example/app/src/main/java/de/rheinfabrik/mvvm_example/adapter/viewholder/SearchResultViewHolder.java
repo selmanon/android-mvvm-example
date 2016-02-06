@@ -11,9 +11,9 @@ import butterknife.Views;
 import de.rheinfabrik.mvvm_example.R;
 import de.rheinfabrik.mvvm_example.viewmodels.SearchResultViewModel;
 
+import static com.jakewharton.rxbinding.view.RxView.clicks;
+import static com.trello.rxlifecycle.RxLifecycle.bindView;
 import static de.rheinfabrik.mvvm_example.utils.rx.BindViewImmediate.bindViewImmediate;
-import static rx.android.view.ViewObservable.bindView;
-import static rx.android.view.ViewObservable.clicks;
 
 /**
  * ViewHolder used in SearchResultsAdapter.
@@ -61,10 +61,11 @@ public class SearchResultViewHolder extends RecyclerView.ViewHolder {
 
         // Bind clicks
         clicks(mCardView)
-                .subscribe(x -> mViewModel.openDetailsCommand.onNext(null));
+                .subscribe(x -> mViewModel.openDetailsCommand.call(null));
 
         // Bind open details
-        bindView(itemView, mViewModel.onOpenDetails())
+        mViewModel.onOpenDetails()
+                .compose(bindView(itemView))
                 .subscribe(mContext::startActivity);
     }
 

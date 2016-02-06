@@ -29,7 +29,7 @@ class DetailsViewModelTitleSubjectSpecs extends AndroidSpecification {
             DetailsViewModel viewModel = new DetailsViewModel()
 
         and: "I send the item to the view model"
-            viewModel.setItemCommand.onNext(searchResult)
+            viewModel.setItemCommand.call(searchResult)
 
         when: "I ask for the title"
             String title = viewModel.title().toBlocking().first()
@@ -66,10 +66,10 @@ class DetailsViewModelPlotSubjectSpecs extends AndroidSpecification {
             DetailsViewModel viewModel = new DetailsViewModel(controller)
 
         when: "I send the search result item to it"
-            viewModel.setItemCommand.onNext(searchResult)
+            viewModel.setItemCommand.call(searchResult)
 
         and: "I request the details"
-            viewModel.loadDetailsCommand.onNext(null)
+            viewModel.loadDetailsCommand.call(null)
 
         and: "I ask for the plot"
             String plot = viewModel.plot().toBlocking().first()
@@ -106,10 +106,10 @@ class DetailsViewModelPosterUrlSubjectSpecs extends AndroidSpecification {
             DetailsViewModel viewModel = new DetailsViewModel(controller)
 
         when: "I send the search result item to it"
-            viewModel.setItemCommand.onNext(searchResult)
+            viewModel.setItemCommand.call(searchResult)
 
         and: "I request the details"
-            viewModel.loadDetailsCommand.onNext(null)
+            viewModel.loadDetailsCommand.call(null)
 
         and: "I ask for the poster url"
             String posterUrl = viewModel.posterUrl().toBlocking().first()

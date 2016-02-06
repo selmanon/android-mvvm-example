@@ -64,10 +64,10 @@ public class DetailsActivity extends RxAppCompatActivity {
         // Send item to view model
         DetailsActivityExtras extras = new DetailsActivityExtras();
         Icepick.restoreInstanceState(extras, getIntent().getExtras());
-        mViewModel.setItemCommand.onNext(extras.searchResult);
+        mViewModel.setItemCommand.call(extras.searchResult);
 
         // Start loading the details
-        mViewModel.loadDetailsCommand.onNext(null);
+        mViewModel.loadDetailsCommand.call(null);
     }
 
     @Override

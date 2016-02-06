@@ -16,11 +16,8 @@ import de.rheinfabrik.mvvm_example.ui.views.SearchToolbar;
 import de.rheinfabrik.mvvm_example.utils.KeyboardHandler;
 import de.rheinfabrik.mvvm_example.viewmodels.SearchViewModel;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.android.widget.OnTextChangeEvent;
-import rx.functions.Action1;
 
-import static rx.android.lifecycle.LifecycleObservable.bindActivityLifecycle;
-import static rx.android.widget.WidgetObservable.text;
+import static com.jakewharton.rxbinding.widget.RxTextView.textChanges;
 
 /**
  * Activity which is responsible for searching and displaying the results.
@@ -94,11 +91,10 @@ public class SearchActivity extends RxAppCompatActivity {
                 });
 
         // Bind text input and start search
-        text(mToolbar.getSearchEditTextView())
-                .map(OnTextChangeEvent::text)
+        textChanges(mToolbar.getSearchEditTextView())
                 .map(CharSequence::toString)
                 .compose(bindToLifecycle())
-                .subscribe(mSearchViewModel.searchCommand::onNext);
+                .subscribe(mSearchViewModel.searchCommand::call);
 
         // Bind search results
         mSearchViewModel.searchResults()
@@ -125,7 +121,7 @@ public class SearchActivity extends RxAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item == mSearchItem) {
-            mSearchViewModel.toggleSearchVisibilityCommand.onNext(null);
+            mSearchViewModel.toggleSearchVisibilityCommand.call(null);
 
             return true;
         }

@@ -36,7 +36,7 @@ class SearchResultViewModelOpenDetailsSubjectSpecs extends Specification {
             SearchResultViewModel viewModel = new SearchResultViewModel(mContext)
 
         and: "I send the item to view model"
-            viewModel.setSearchResultCommand.onNext(item)
+            viewModel.setSearchResultCommand.call(item)
 
         and: "I am listening for details intents"
             Intent intent = null
@@ -44,7 +44,7 @@ class SearchResultViewModelOpenDetailsSubjectSpecs extends Specification {
                     .subscribe({ i -> intent = i })
 
         when: "I want to open the details"
-            viewModel.openDetailsCommand.onNext(null)
+            viewModel.openDetailsCommand.call(null)
 
         then: "I receive an intent"
             intent != null
@@ -81,7 +81,7 @@ class SearchResultViewModelTextSubjectSpecs extends Specification {
             SearchResultViewModel viewModel = new SearchResultViewModel(mContext)
 
         when: "I send the item to view model"
-            viewModel.setSearchResultCommand.onNext(searchResult)
+            viewModel.setSearchResultCommand.call(searchResult)
 
         and: "I ask for the text"
             Spanned text = viewModel.text().toBlocking().first()
@@ -98,10 +98,10 @@ class SearchResultViewModelTextSubjectSpecs extends Specification {
             searchResult.year = "2015"
 
         and: "A view model"
-            SearchResultViewModel viewModel = new SearchResultViewModel()
+            SearchResultViewModel viewModel = new SearchResultViewModel(mContext)
 
         when: "I send the item to view model"
-            viewModel.setSearchResultCommand.onNext(searchResult)
+            viewModel.setSearchResultCommand.call(searchResult)
 
         and: "I ask for the text"
             Spanned text = viewModel.text().toBlocking().first()
@@ -121,7 +121,7 @@ class SearchResultViewModelTextSubjectSpecs extends Specification {
             SearchResultViewModel viewModel = new SearchResultViewModel(mContext)
 
         when: "I send the item to view model"
-            viewModel.setSearchResultCommand.onNext(searchResult)
+            viewModel.setSearchResultCommand.call(searchResult)
 
         and: "I ask for the text"
             Spanned text = viewModel.text().toBlocking().first()

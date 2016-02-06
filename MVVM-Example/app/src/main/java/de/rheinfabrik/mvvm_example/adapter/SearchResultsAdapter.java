@@ -55,6 +55,6 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewH
 
         // Send current data to view model
         SearchResult searchResult = mResults.get(position);
-        searchResultViewHolder.getViewModel().setSearchResultCommand.onNext(searchResult);
+        searchResultViewHolder.getViewModel().setSearchResultCommand.call(searchResult);
     }
 }

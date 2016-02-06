@@ -40,7 +40,7 @@ class SearchViewModelOnSearchResultsReceivedSpecs extends AndroidSpecification {
             SearchViewModel viewModel = new SearchViewModel(controller)
 
         when: "I send frozen to the view model"
-            viewModel.searchCommand.onNext("frozen");
+            viewModel.searchCommand.call("frozen");
 
         and: "I ask for the search results"
             List<SearchResult> results = viewModel.searchResults().toBlocking().firstOrDefault(null)
@@ -88,7 +88,7 @@ class SearchViewModelToogleSearchVisibilitySpecs extends AndroidSpecification {
             SearchViewModel searchViewModel = new SearchViewModel();
 
         when: "I call toggle"
-            searchViewModel.toggleSearchVisibilityCommand.onNext(null)
+            searchViewModel.toggleSearchVisibilityCommand.call(null)
 
         and: "I subscribe to the onShowSearchSubject"
             boolean showSearch = searchViewModel.showSearch().toBlocking().first();
@@ -103,10 +103,10 @@ class SearchViewModelToogleSearchVisibilitySpecs extends AndroidSpecification {
             SearchViewModel searchViewModel = new SearchViewModel();
 
         when: "I call toggle"
-            searchViewModel.toggleSearchVisibilityCommand.onNext(null)
+            searchViewModel.toggleSearchVisibilityCommand.call(null)
 
         and: "I call toggle again"
-            searchViewModel.toggleSearchVisibilityCommand.onNext(null)
+            searchViewModel.toggleSearchVisibilityCommand.call(null)
 
         and: "I subscribe to the onShowSearchSubject"
             boolean showSearch = searchViewModel.showSearch().toBlocking().first();
