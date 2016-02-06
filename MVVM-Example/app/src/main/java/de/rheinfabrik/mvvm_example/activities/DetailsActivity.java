@@ -8,18 +8,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import butterknife.InjectView;
 import butterknife.Views;
 import de.rheinfabrik.mvvm_example.R;
 import de.rheinfabrik.mvvm_example.activities.extras.DetailsActivityExtras;
 import de.rheinfabrik.mvvm_example.utils.BlurTransformation;
-import de.rheinfabrik.mvvm_example.utils.rx.RxAppCompatActivity;
 import de.rheinfabrik.mvvm_example.viewmodels.DetailsViewModel;
 import icepick.Icepick;
 import rx.android.schedulers.AndroidSchedulers;
-
-import static rx.android.lifecycle.LifecycleObservable.bindActivityLifecycle;
 
 /**
  * Activity responsible for displaying the details.
@@ -77,24 +75,28 @@ public class DetailsActivity extends RxAppCompatActivity {
         super.onResume();
 
         // Bind title
-        bindActivityLifecycle(lifecycle(), mViewModel.title())
+        mViewModel.title()
+                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mToolbar::setTitle);
 
         // Bind plot visibility
-        bindActivityLifecycle(lifecycle(), mViewModel.plot())
+        mViewModel.plot()
                 .map(text -> text == null || text.isEmpty() ? View.GONE : View.VISIBLE)
+                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mCardView::setVisibility);
 
         // Bind plot
-        bindActivityLifecycle(lifecycle(), mViewModel.plot())
+        mViewModel.plot()
+                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mTextView::setText);
 
         // Bind poster
-        bindActivityLifecycle(lifecycle(), mViewModel.posterUrl())
+        mViewModel.posterUrl()
                 .map(url -> Picasso.with(getApplicationContext()).load(url).transform(new BlurTransformation(this)))
+                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(picasso -> {
                     picasso.into(mImageView);

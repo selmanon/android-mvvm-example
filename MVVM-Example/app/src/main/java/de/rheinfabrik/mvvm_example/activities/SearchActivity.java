@@ -6,16 +6,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
 import butterknife.InjectView;
 import butterknife.Views;
 import de.rheinfabrik.mvvm_example.R;
 import de.rheinfabrik.mvvm_example.adapter.SearchResultsAdapter;
 import de.rheinfabrik.mvvm_example.ui.views.SearchToolbar;
 import de.rheinfabrik.mvvm_example.utils.KeyboardHandler;
-import de.rheinfabrik.mvvm_example.utils.rx.RxAppCompatActivity;
 import de.rheinfabrik.mvvm_example.viewmodels.SearchViewModel;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.widget.OnTextChangeEvent;
+import rx.functions.Action1;
 
 import static rx.android.lifecycle.LifecycleObservable.bindActivityLifecycle;
 import static rx.android.widget.WidgetObservable.text;
@@ -61,8 +63,9 @@ public class SearchActivity extends RxAppCompatActivity {
         super.onResume();
 
         // Bind show/hide search and show correct icon
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.showSearch())
+        mSearchViewModel.showSearch()
                 .map(showSearch -> showSearch ? R.mipmap.ic_action_close : R.mipmap.ic_action_search)
+                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> {
 
@@ -73,12 +76,14 @@ public class SearchActivity extends RxAppCompatActivity {
                 });
 
         // Bind show/hide search UI in toolbar
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.showSearch())
+        mSearchViewModel.showSearch()
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(bindToLifecycle())
                 .subscribe(mToolbar::setSearchUIVisible);
 
         // Bind show/hide keyboard
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.showSearch())
+        mSearchViewModel.showSearch()
+                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(showKeyboard -> {
                     if (showKeyboard) {
@@ -89,14 +94,16 @@ public class SearchActivity extends RxAppCompatActivity {
                 });
 
         // Bind text input and start search
-        bindActivityLifecycle(lifecycle(), text(mToolbar.getSearchEditTextView()))
+        text(mToolbar.getSearchEditTextView())
                 .map(OnTextChangeEvent::text)
                 .map(CharSequence::toString)
+                .compose(bindToLifecycle())
                 .subscribe(mSearchViewModel.searchCommand::onNext);
 
         // Bind search results
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.searchResults())
+        mSearchViewModel.searchResults()
                 .map(results -> new SearchResultsAdapter(this, results))
+                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mRecyclerView::setAdapter);
     }
