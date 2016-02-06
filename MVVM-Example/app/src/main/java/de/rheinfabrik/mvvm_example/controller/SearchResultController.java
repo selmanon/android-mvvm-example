@@ -7,6 +7,7 @@ import de.rheinfabrik.mvvm_example.network.OMDBApiFactory;
 import de.rheinfabrik.mvvm_example.network.OMDBApiService;
 import de.rheinfabrik.mvvm_example.network.models.SearchResult;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Controller for interacting with search results.
@@ -43,6 +44,7 @@ public class SearchResultController {
     public Observable<List<SearchResult>> getSearchResults(String searchTerm) {
         return mOMDBApiService
                 .getSearchResults(searchTerm)
+                .subscribeOn(Schedulers.io())
                 .map(searchResults -> searchResults == null ? new ArrayList<>() : searchResults);
     }
 }

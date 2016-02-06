@@ -19,12 +19,11 @@ public interface OMDBApiService {
      * Returns a cold observable emitting the results for a given search term.
      */
     @GET("/")
-    public Observable<List<SearchResult>> getSearchResults(@Query("s") String searchTerm);
+    Observable<List<SearchResult>> getSearchResults(@Query("s") String searchTerm);
 
     /**
      * Returns a cold observable emitting the details for a given id (containing the full plot)
      */
     @GET("/?plot=full")
-    public Observable<DetailsResult> getDetails(@Query("i") String identifier);
-
+    Observable<DetailsResult> getDetails(@Query("i") String identifier);
 }

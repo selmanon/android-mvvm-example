@@ -5,6 +5,7 @@ import de.rheinfabrik.mvvm_example.network.OMDBApiService;
 import de.rheinfabrik.mvvm_example.network.models.DetailsResult;
 import de.rheinfabrik.mvvm_example.network.models.SearchResult;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Controller responsible for detail results.
@@ -37,6 +38,6 @@ public class DetailsResultController {
      * Fetches the details for a given search result.
      */
     public Observable<DetailsResult> getDetails(SearchResult searchResult) {
-        return mOMDBApiService.getDetails(searchResult.identifier);
+        return mOMDBApiService.getDetails(searchResult.identifier).subscribeOn(Schedulers.io());
     }
 }

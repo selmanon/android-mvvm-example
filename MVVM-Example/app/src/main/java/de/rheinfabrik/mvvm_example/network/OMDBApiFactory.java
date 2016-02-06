@@ -1,13 +1,13 @@
 package de.rheinfabrik.mvvm_example.network;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
 import de.rheinfabrik.mvvm_example.network.deserializer.SearchResultsDeserializer;
-import retrofit.RestAdapter;
-import retrofit.client.Client;
-import retrofit.client.OkClient;
-import retrofit.converter.GsonConverter;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
 
 /**
  * Class used to generate OMDBApiService instances.
@@ -24,28 +24,26 @@ public class OMDBApiFactory {
      * Creates a fresh OMDBApiService instance.
      */
     public static OMDBApiService newApi() {
-        return newApi(new OkClient(new OkHttpClient()));
+        return newApi(new OkHttpClient());
     }
 
     /**
      * Creates a fresh OMDBApiService instance with the given client.
      */
-    public static OMDBApiService newApi(Client client) {
+    public static OMDBApiService newApi(OkHttpClient client) {
 
         // Gson
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(SearchResultsDeserializer.TYPE, new SearchResultsDeserializer());
-
-        // Setup rest adapter.
-        RestAdapter.Builder restAdapterBuilder = new RestAdapter
-                .Builder()
-                .setClient(client)
-                .setConverter(new GsonConverter(gsonBuilder.create()))
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint(API_ENDPOINT);
+        Gson gson = gsonBuilder.create();
 
         // Build API service
-        return restAdapterBuilder.build().create(OMDBApiService.class);
+        return new Retrofit.Builder()
+                .client(client)
+                .baseUrl(API_ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build()
+                .create(OMDBApiService.class);
     }
-
 }
